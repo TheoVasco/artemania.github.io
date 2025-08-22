@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arte Mania - Paredes Personalizadas</title>
     <style>
-        /* Variáveis de cores */
         :root {
             --primary: #2c3e50;
             --secondary: #e74c3c;
@@ -15,7 +14,6 @@
             --text: #333;
         }
         
-        /* Reset e estilos base */
         * {
             margin: 0;
             padding: 0;
@@ -36,7 +34,6 @@
             padding: 0 15px;
         }
         
-        /* Header */
         header {
             background-color: var(--primary);
             color: white;
@@ -83,68 +80,62 @@
         
         /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://placehold.co/1200x600/2c3e50/FFFFFF/png?text=Paredes+Personalizadas') no-repeat center center/cover;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1758&q=80') no-repeat center center/cover;
             color: white;
-            padding: 6rem 0;
+            padding: 8rem 0;
             text-align: center;
         }
         
         .hero h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             max-width: 700px;
             margin: 0 auto 2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
         
         .btn {
             display: inline-block;
             background: var(--secondary);
             color: white;
-            padding: 0.8rem 1.8rem;
+            padding: 1rem 2.5rem;
             border: none;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+            margin: 0.5rem;
         }
         
         .btn:hover {
             background: #c0392b;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
-        /* Sections gerais */
-        section {
-            padding: 4rem 0;
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
         }
         
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .section-title h2 {
-            font-size: 2.2rem;
+        .btn-outline:hover {
+            background: white;
             color: var(--primary);
-            position: relative;
-            padding-bottom: 1rem;
         }
         
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: var(--secondary);
+        /* About Section */
+        .about {
+            padding: 5rem 0;
+            background: white;
         }
         
-        /* Sobre */
         .about-content {
             display: flex;
             flex-wrap: wrap;
@@ -161,13 +152,14 @@
             flex: 1;
             min-width: 300px;
             height: 300px;
-            background: url('https://placehold.co/500x300/3498db/FFFFFF/png?text=Arte+Mania') no-repeat center center/cover;
+            background: url('https://images.unsplash.com/photo-1615529328331-f8917597711f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80') no-repeat center center/cover;
             border-radius: 10px;
         }
         
-        /* Problema/Solução */
+        /* Problem/Solution Section */
         .problem-solution {
             background-color: var(--light);
+            padding: 5rem 0;
         }
         
         .ps-content {
@@ -194,36 +186,137 @@
             border-top: 5px solid #2ecc71;
         }
         
-        /* Diferenciais */
+        /* Features Section */
         .features {
-            display: flex;
-            flex-wrap: wrap;
+            padding: 5rem 0;
+            background: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--secondary);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
         
-        .feature {
-            flex: 1;
-            min-width: 250px;
-            text-align: center;
-            padding: 1.5rem;
+        .feature-card {
+            background: #f9f9f9;
             border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s;
         }
         
-        .feature:hover {
+        .feature-card:hover {
             transform: translateY(-10px);
         }
         
-        .feature i {
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .feature-card p {
+            text-align: center;
+        }
+        
+        /* Benefits Section */
+        .benefits {
+            padding: 5rem 0;
+            background-color: var(--light);
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .benefit-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .benefit-card i {
             font-size: 2.5rem;
             color: var(--secondary);
             margin-bottom: 1rem;
         }
         
-        /* Galeria */
+        /* Simulator Preview */
+        .simulator-preview {
+            padding: 5rem 0;
+            background: linear-gradient(to bottom, #f9f9f9, #e0e0e0);
+            text-align: center;
+        }
+        
+        .preview-container {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .preview-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('https://midiaprint.net/wp-content/uploads/2022/10/adesivo-de-parede-corporativo-midiaprint-19.jpg') no-repeat center center/cover;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .preview-content h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        
+        .preview-content p {
+            margin-bottom: 2rem;
+            color: #666;
+        }
+        
+        /* Gallery Section */
         .gallery {
-            background-color: var(--light);
+            padding: 5rem 0;
+            background: white;
         }
         
         .gallery-grid {
@@ -250,14 +343,25 @@
             transform: scale(1.1);
         }
         
-        /* CTA */
+        /* CTA Section */
         .cta {
-            text-align: center;
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://placehold.co/1200x400/2c3e50/FFFFFF/png?text=Transforme+seu+Espaço') no-repeat center center/cover;
+            padding: 5rem 0;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://midiaprint.net/wp-content/uploads/2022/10/adesivo-de-parede-corporativo-midiaprint-9.jpg') no-repeat center center/cover;
             color: white;
+            text-align: center;
         }
         
-        /* Footer */
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
         footer {
             background-color: var(--dark);
             color: white;
@@ -322,7 +426,6 @@
             border-top: 1px solid rgba(255,255,255,0.1);
         }
         
-        /* Responsividade */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -335,11 +438,15 @@
             }
             
             .hero h1 {
-                font-size: 2.2rem;
+                font-size: 2.5rem;
             }
             
             .hero p {
-                font-size: 1rem;
+                font-size: 1.2rem;
+            }
+            
+            .about-content, .ps-content {
+                flex-direction: column;
             }
         }
     </style>
@@ -367,12 +474,13 @@
         <div class="container">
             <h1>Transforme suas paredes em obras de arte</h1>
             <p>Você já imaginou entrar em um ambiente e sentir que ele tem a sua cara, que reflete o seu estilo e personalidade desde as paredes?</p>
-            <a href="#contato" class="btn">Solicite um Orçamento</a>
+            <a href="simulador.html" class="btn">Experimente o Simulador</a>
+            <a href="#sobre" class="btn btn-outline">Saiba Mais</a>
         </div>
     </section>
 
-    <!-- Sobre -->
-    <section id="sobre">
+    <!-- About Section -->
+    <section class="about" id="sobre">
         <div class="container">
             <div class="section-title">
                 <h2>Quem Somos</h2>
@@ -380,7 +488,7 @@
             <div class="about-content">
                 <div class="about-text">
                     <p>Somos uma empresa que busca transformar seu armazenário em um lugar cheio de vida e personalidade através da arte de pintura de paredes.</p>
-                    <p>A maioria dos ambientes têm paredes comuns, brancas, sem vida. Muitas vezes, não transmitem nada sobre quem está ali. Isso faz os espaços parecerem impessoais e até desmotivadores.</p>
+                    <p>A maioria dos ambientes têm paredes comuns, brancas, sem vida. Muitas vezes, não transmiten nada sobre quem está ali. Isso faz os espaços parecerem impessoais e até desmotivadores.</p>
                     <p>É por isso que criamos as paredes personalizadas, onde cada detalhe é feito de acordo com o gosto do cliente. Seja em cores, texturas, estampas, ilustrações ou até efeitos 3D, transformamos a parede em um elemento único de design.</p>
                 </div>
                 <div class="about-image"></div>
@@ -388,7 +496,7 @@
         </div>
     </section>
 
-    <!-- Problema/Solução -->
+    <!-- Problem/Solution Section -->
     <section class="problem-solution">
         <div class="container">
             <div class="ps-content">
@@ -404,60 +512,60 @@
         </div>
     </section>
 
-    <!-- Diferenciais -->
-    <section id="diferenciais">
+    <!-- Features Section -->
+    <section class="features" id="diferenciais">
         <div class="container">
             <div class="section-title">
                 <h2>Nossos Diferenciais</h2>
             </div>
-            <div class="features">
-                <div class="feature">
+            <div class="features-grid">
+                <div class="feature-card">
                     <i class="fas fa-palette"></i>
                     <h3>Total Personalização</h3>
                     <p>Cores, estilos, temas e materiais escolhidos por você para criar o ambiente dos seus sonhos.</p>
                 </div>
-                <div class="feature">
+                <div class="feature-card">
                     <i class="fas fa-award"></i>
                     <h3>Alta Qualidade</h3>
                     <p>Materiais premium e mão de obra especializada garantindo durabilidade e excelência no acabamento.</p>
                 </div>
-                <div class="feature">
+                <div class="feature-card">
                     <i class="fas fa-gem"></i>
                     <h3>Exclusividade</h3>
                     <p>Cada projeto é único, criado especialmente para atender seus gostos e necessidades específicas.</p>
                 </div>
-                <div class="feature">
+                <div class="feature-card"><center>
                     <i class="fas fa-puzzle-piece"></i>
                     <h3>Integração Total</h3>
                     <p>Harmonização perfeita com o restante da decoração e estilo do seu ambiente.</p>
-                </div>
+                </center></div>
             </div>
         </div>
     </section>
 
-    <!-- Benefícios -->
-    <section>
+    <!-- Benefits Section -->
+    <section class="benefits">
         <div class="container">
             <div class="section-title">
                 <h2>Benefícios para Você</h2>
             </div>
-            <div class="features">
-                <div class="feature">
+            <div class="benefits-grid">
+                <div class="benefit-card">
                     <i class="fas fa-home"></i>
                     <h3>Ambientes Acolhedores</h3>
                     <p>Transforme seu espaço em um lugar mais convidativo e confortável.</p>
                 </div>
-                <div class="feature">
+                <div class="benefit-card">
                     <i class="fas fa-paint-brush"></i>
                     <h3>Expressão Pessoal</h3>
                     <p>Suas paredes refletem sua identidade e estilo único.</p>
                 </div>
-                <div class="feature">
+                <div class="benefit-card">
                     <i class="fas fa-chart-line"></i>
                     <h3>Valorização do Imóvel</h3>
                     <p>Um ambiente personalizado e bem cuidado aumenta o valor do seu espaço.</p>
                 </div>
-                <div class="feature">
+                <div class="benefit-card">
                     <i class="fas fa-smile"></i>
                     <h3>Experiência Única</h3>
                     <p>Surpreenda e encante todos que visitarem seu ambiente.</p>
@@ -466,7 +574,26 @@
         </div>
     </section>
 
-    <!-- Galeria -->
+    <!-- Simulator Preview -->
+    <section class="simulator-preview">
+        <div class="container">
+            <div class="section-title">
+                <h2>Experimente antes de decidir</h2>
+            </div>
+            <div class="preview-container">
+                <div class="preview-image">
+                    <a href="simulador.html" class="btn"><i class="fas fa-play-circle"></i> Iniciar Simulador</a>
+                </div>
+                <div class="preview-content">
+                    <h3>Simulador de Paredes Personalizadas</h3>
+                    <p>Nosso simulador interativo permite que você visualize como ficaria sua parede personalizada com diferentes cores, texturas e adesivos. Experimente diversas combinações antes de tomar sua decisão!</p>
+                    <a href="simulador.html" class="btn">Acessar Simulador</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
     <section class="gallery" id="galeria">
         <div class="container">
             <div class="section-title">
@@ -474,44 +601,43 @@
             </div>
             <div class="gallery-grid">
                 <div class="gallery-item">
-                    <img src="https://placehold.co/300x200/3498db/FFFFFF/png?text=Projeto+1" alt="Projeto 1">
+                    <img src="https://midiaprint.net/wp-content/uploads/2022/10/adesivo-de-parede-corporativo-midiaprint-19.jpg" alt="Projeto Corporativo 1">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://placehold.co/300x200/e74c3c/FFFFFF/png?text=Projeto+2" alt="Projeto 2">
+                    <img src="https://midiaprint.net/wp-content/uploads/2022/10/adesivo-de-parede-corporativo-midiaprint-9.jpg" alt="Projeto Corporativo 2">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://placehold.co/300x200/2ecc71/FFFFFF/png?text=Projeto+3" alt="Projeto 3">
+                    <img src="https://midiaprint.net/wp-content/uploads/2022/10/adesivo-de-parede-corporativo-midiaprint-16.jpg" alt="Projeto Corporativo 3">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://placehold.co/300x200/9b59b6/FFFFFF/png?text=Projeto+4" alt="Projeto 4">
+                    <img src="https://centraldoartesanato.com.br/_blog/wp-content/uploads/2024/01/291/quarto-de-adolescente-01.jpg" alt="Quarto Adolescente">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://placehold.co/300x200/f1c40f/FFFFFF/png?text=Projeto+5" alt="Projeto 5">
+                    <img src="https://arkpad.com.br/wp-content/uploads/2020/07/quarto-gesso-3d-76.jpg" alt="Quarto com Gesso 3D">
                 </div>
                 <div class="gallery-item">
-                    <img src="https://placehold.co/300x200/1abc9c/FFFFFF/png?text=Projeto+6" alt="Projeto 6">
+                    <img src="https://www.decorfacil.com/wp-content/uploads/2023/07/20240131parede-com-textura-4.jpg" alt="Parede com Textura">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Chamada para ação -->
-    <section class="cta">
+    <!-- CTA Section -->
+    <section class="cta" id="contato">
         <div class="container">
             <h2>Pronto para transformar seu espaço?</h2>
-            <p>Agora imagine como a sua sala, quarto ou escritório poderia se transformar com uma parede feita especialmente para você.</p>
-            <p>Vamos conversar sobre o estilo que mais combina com você e começar essa transformação?</p>
-            <a href="#contato" class="btn">Entre em Contato</a>
+            <p>Agora imagine como a sua sala, quarto ou escritório poderia se transformar com uma parede feita especialmente para você. Vamos conversar sobre o estilo que mais combina com você e começar essa transformação?</p>
+            <a href="https://wa.me/553198888777" class="btn"><i class="fab fa-whatsapp"></i> Falar no WhatsApp</a>
         </div>
     </section>
 
-    <!-- Footer/Contato -->
-    <footer id="contato">
+    <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Arte Mania</h3>
                     <p>Não vendemos apenas paredes decoradas, vendemos um ambiente que fala sobre você. E cada projeto é único.</p>
+                    <p><strong>Ser contando ganhará vida</strong></p>
                 </div>
                 <div class="footer-section">
                     <h3>Contato</h3>
@@ -525,6 +651,7 @@
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-whatsapp"></i></a>
                     </div>
+                    <p>@artemaniaambvida ao seu contrito</p>
                 </div>
                 <div class="footer-section">
                     <h3>Links Rápidos</h3>
@@ -533,6 +660,7 @@
                         <li><a href="#sobre">Sobre</a></li>
                         <li><a href="#diferenciais">Diferenciais</a></li>
                         <li><a href="#galeria">Galeria</a></li>
+                        <li><a href="simulador.html">Simulador</a></li>
                     </ul>
                 </div>
             </div>

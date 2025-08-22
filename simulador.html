@@ -128,6 +128,17 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
+        .texture-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 1.1;
+            mix-blend-mode: multiply;
+        }
+        
         .controls-panel {
             flex: 1;
             min-width: 300px;
@@ -135,6 +146,9 @@
         
         .control-group {
             margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 8px;
         }
         
         .control-group h3 {
@@ -196,12 +210,15 @@
         .texture-option div {
             width: 100%;
             height: 100%;
+            background-size: cover;
+            background-position: center;
         }
         
         .sticker-options {
             display: flex;
             flex-wrap: wrap;
             gap: 0.8rem;
+            margin-bottom: 1rem;
         }
         
         .sticker-option {
@@ -225,14 +242,66 @@
         .sticker-option img {
             max-width: 100%;
             max-height: 100%;
+            object-fit: contain;
         }
         
         .sticker-on-wall {
             position: absolute;
             cursor: move;
             user-select: none;
-            max-width: 100px;
-            max-height: 100px;
+            width: 100px;
+            height: 100px;
+            z-index: 10;
+            min-width: 5px;
+            min-height: 5px;
+            max-width: 500px;
+            max-height: 500px;
+        }
+        
+        .sticker-on-wall img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+        
+        .sticker-controls {
+            position: absolute;
+            top: -35px;
+            right: 0;
+            display: none;
+            z-index: 20;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 4px;
+            gap: 4px;
+        }
+        
+        .sticker-on-wall:hover .sticker-controls {
+            display: flex;
+        }
+        
+        .sticker-controls button {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            border: none;
+            background: var(--secondary);
+            color: white;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .sticker-controls button.resize-increase {
+            background: var(--accent);
+        }
+        
+        .sticker-controls button.resize-decrease {
+            background: #7f8c8d;
         }
         
         .action-buttons {
@@ -279,6 +348,35 @@
             border-radius: 4px;
             width: 100%;
             margin-top: 0.5rem;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--accent);
+        }
+        
+        .upload-area i {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-area p {
+            margin: 0;
+            color: #666;
+        }
+        
+        #sticker-upload {
+            display: none;
         }
         
         footer {
@@ -394,6 +492,7 @@
             
             <div class="simulator-container">
                 <div class="wall-preview" id="wall-preview">
+                    <div class="texture-overlay" id="texture-overlay"></div>
                     <!-- Adesivos serão adicionados aqui via JavaScript -->
                 </div>
                 
@@ -423,13 +522,13 @@
                                 </div>
                             </div>
                             <div class="texture-option" data-texture="brick">
-                                <div style="background-image: url('https://placehold.co/60x60/aaaaaa/ffffff/png?text=Tijolo'); background-size: cover;"></div>
+                                <div style="background-image: url('https://img.freepik.com/fotos-gratis/texturas-de-tijolos-brancos-para-fundo_74190-572.jpg')"></div>
                             </div>
                             <div class="texture-option" data-texture="wood">
-                                <div style="background-image: url('https://placehold.co/60x60/8b4513/ffffff/png?text=Madeira'); background-size: cover;"></div>
+                                <div style="background-image: url('https://img.freepik.com/vetores-premium/imitacao-de-textura-de-madeira-linhas-pretas-sobre-fundo-branco-desenho-vetorial_149326-2023.jpg')"></div>
                             </div>
                             <div class="texture-option" data-texture="concrete">
-                                <div style="background-image: url('https://placehold.co/60x60/808080/ffffff/png?text=Concreto'); background-size: cover;"></div>
+                                <div style="background-image: url('https://img.freepik.com/fotos-premium/fundo-de-textura-de-concreto-blanco-vazio-desenho-de-fundo-abstrato-parede-de-concreto-em-branco-cor-branca-para-fundo-de-textura_263512-7497.jpg?semt=ais_hybrid&w=740&q=80')"></div>
                             </div>
                         </div>
                     </div>
@@ -438,23 +537,29 @@
                         <h3>Adesivos Decorativos</h3>
                         <div class="sticker-options">
                             <div class="sticker-option" data-sticker="tree">
-                                <img src="https://placehold.co/40x40/2ecc71/ffffff/png?text=Árvore" alt="Árvore">
+                                <img src="https://artpoin.com/wp-content/uploads/2023/10/artpoin-masha-e-o-urso46.png" alt="Árvore">
                             </div>
                             <div class="sticker-option" data-sticker="flower">
-                                <img src="https://placehold.co/40x40/e74c3c/ffffff/png?text=Flor" alt="Flor">
+                                <img src="https://static.vecteezy.com/system/resources/previews/024/134/727/non_2x/purple-flower-design-free-png.png" alt="Flor">
                             </div>
                             <div class="sticker-option" data-sticker="star">
-                                <img src="https://placehold.co/40x40/f1c40f/ffffff/png?text=Estrela" alt="Estrela">
+                                <img src="https://png.pngtree.com/png-vector/20231016/ourmid/pngtree-kawaii-cute-star-yellow-color-with-smile-faces-cartoon-for-kids-png-image_10198393.png" alt="Estrela">
                             </div>
                             <div class="sticker-option" data-sticker="heart">
-                                <img src="https://placehold.co/40x40/e74c3c/ffffff/png?text=Coração" alt="Coração">
+                                <img src="https://artpoin.com/wp-content/uploads/2023/07/artpoin-coracoes-fundo-transparente-png.png" alt="Coração">
                             </div>
                             <div class="sticker-option" data-sticker="bird">
-                                <img src="https://placehold.co/40x40/3498db/ffffff/png?text=Pássaro" alt="Pássaro">
+                                <img src="https://png.pngtree.com/png-vector/20241030/ourmid/pngtree-d-cute-little-bird-in-blue-and-skin-color-eyes-sparrow-png-image_14174188.png" alt="Pássaro">
                             </div>
                             <div class="sticker-option" data-sticker="butterfly">
-                                <img src="https://placehold.co/40x40/9b59b6/ffffff/png?text=Borboleta" alt="Borboleta">
+                                <img src="https://artpoin.com/wp-content/uploads/2023/07/artpoin-borboletas-coloridas.png" alt="Borboleta">
                             </div>
+                        </div>
+                        
+                        <div class="upload-area" id="upload-trigger">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Clique para fazer upload do seu próprio adesivo</p>
+                            <input type="file" id="sticker-upload" accept="image/*">
                         </div>
                     </div>
                     
@@ -510,28 +615,39 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const wallPreview = document.getElementById('wall-preview');
+            const textureOverlay = document.getElementById('texture-overlay');
             const colorOptions = document.querySelectorAll('.color-option');
             const customColorInput = document.getElementById('custom-color');
             const textureOptions = document.querySelectorAll('.texture-option');
             const stickerOptions = document.querySelectorAll('.sticker-option');
             const resetButton = document.getElementById('reset-design');
             const saveButton = document.getElementById('save-design');
+            const uploadTrigger = document.getElementById('upload-trigger');
+            const stickerUpload = document.getElementById('sticker-upload');
             
             let currentColor = '#ffffff';
             let currentTexture = 'none';
             let selectedSticker = null;
             let stickersOnWall = [];
             
+            // Texturas com URLs atualizadas
+            const textureUrls = {
+                'none': '',
+                'brick': 'https://img.freepik.com/fotos-gratis/texturas-de-tijolos-brancos-para-fundo_74190-572.jpg',
+                'wood': 'https://img.freepik.com/vetores-premium/imitacao-de-textura-de-madeira-linhas-pretas-sobre-fundo-branco-desenho-vetorial_149326-2023.jpg',
+                'concrete': 'https://img.freepik.com/fotos-premium/fundo-de-textura-de-concreto-blanco-vazio-desenho-de-fundo-abstrato-parede-de-concreto-em-branco-cor-branca-para-fundo-de-textura_263512-7497.jpg?semt=ais_hybrid&w=740&q=80'
+            };
+            
             // Função para atualizar a aparência da parede
             function updateWallAppearance() {
                 wallPreview.style.backgroundColor = currentColor;
                 
-                // Remove classes de textura existentes
-                wallPreview.classList.remove('texture-brick', 'texture-wood', 'texture-concrete');
-                
-                // Adiciona a classe de textura selecionada
+                // Atualiza a textura
                 if (currentTexture !== 'none') {
-                    wallPreview.classList.add(`texture-${currentTexture}`);
+                    textureOverlay.style.backgroundImage = `url('${textureUrls[currentTexture]}')`;
+                    textureOverlay.style.display = 'block';
+                } else {
+                    textureOverlay.style.display = 'none';
                 }
             }
             
@@ -577,28 +693,81 @@
             stickerOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     selectedSticker = this.getAttribute('data-sticker');
+                    const stickerSrc = this.querySelector('img').src;
                     
-                    // Cria um novo elemento de adesivo na parede
-                    const newSticker = document.createElement('div');
-                    newSticker.className = 'sticker-on-wall';
-                    newSticker.innerHTML = `<img src="https://placehold.co/80x80/3498db/ffffff/png?text=${selectedSticker}" alt="${selectedSticker}">`;
-                    
-                    // Posição aleatória na parede
-                    const maxX = wallPreview.offsetWidth - 80;
-                    const maxY = wallPreview.offsetHeight - 80;
-                    const randomX = Math.floor(Math.random() * maxX);
-                    const randomY = Math.floor(Math.random() * maxY);
-                    
-                    newSticker.style.left = `${randomX}px`;
-                    newSticker.style.top = `${randomY}px`;
-                    
-                    // Torna o adesivo arrastável
-                    makeDraggable(newSticker);
-                    
-                    wallPreview.appendChild(newSticker);
-                    stickersOnWall.push(newSticker);
+                    addStickerToWall(stickerSrc, selectedSticker);
                 });
             });
+            
+            // Função para adicionar adesivo à parede
+            function addStickerToWall(src, alt) {
+                // Cria um novo elemento de adesivo na parede
+                const newSticker = document.createElement('div');
+                newSticker.className = 'sticker-on-wall';
+                newSticker.innerHTML = `
+                    <img src="${src}" alt="${alt}">
+                    <div class="sticker-controls">
+                        <button class="sticker-delete"><i class="fas fa-trash"></i></button>
+                        <button class="resize-increase"><i class="fas fa-plus"></i></button>
+                        <button class="resize-decrease"><i class="fas fa-minus"></i></button>
+                    </div>
+                `;
+                
+                // Posição aleatória na parede
+                const maxX = wallPreview.offsetWidth - 100;
+                const maxY = wallPreview.offsetHeight - 100;
+                const randomX = Math.floor(Math.random() * maxX);
+                const randomY = Math.floor(Math.random() * maxY);
+                
+                newSticker.style.left = `${randomX}px`;
+                newSticker.style.top = `${randomY}px`;
+                
+                // Torna o adesivo arrastável
+                makeDraggable(newSticker);
+                
+                // Adiciona evento para remover o adesivo
+                const deleteBtn = newSticker.querySelector('.sticker-delete');
+                deleteBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    newSticker.remove();
+                    stickersOnWall = stickersOnWall.filter(sticker => sticker !== newSticker);
+                });
+                
+                // Adiciona evento para aumentar o adesivo
+                const increaseBtn = newSticker.querySelector('.resize-increase');
+                increaseBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const width = parseInt(newSticker.style.width || '100');
+                    const height = parseInt(newSticker.style.height || '100');
+                    
+                    const newWidth = width + 30;
+                    const newHeight = height + 30;
+                    
+                    if (newWidth <= 300 && newHeight <= 300) {
+                        newSticker.style.width = newWidth + 'px';
+                        newSticker.style.height = newHeight + 'px';
+                    }
+                });
+                
+                // Adiciona evento para diminuir o adesivo
+                const decreaseBtn = newSticker.querySelector('.resize-decrease');
+                decreaseBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const width = parseInt(newSticker.style.width || '100');
+                    const height = parseInt(newSticker.style.height || '100');
+                    
+                    const newWidth = width - 30;
+                    const newHeight = height - 30;
+                    
+                    if (newWidth >= 50 && newHeight >= 50) {
+                        newSticker.style.width = newWidth + 'px';
+                        newSticker.style.height = newHeight + 'px';
+                    }
+                });
+                
+                wallPreview.appendChild(newSticker);
+                stickersOnWall.push(newSticker);
+            }
             
             // Função para tornar os elementos arrastáveis
             function makeDraggable(element) {
@@ -670,6 +839,22 @@
             saveButton.addEventListener('click', function() {
                 alert('Design salvo com sucesso! Entre em contato conosco para transformar este projeto em realidade.');
                 // Aqui você pode adicionar funcionalidade para realmente salvar o design
+            });
+            
+            // Event listener para upload de adesivos personalizados
+            uploadTrigger.addEventListener('click', function() {
+                stickerUpload.click();
+            });
+            
+            stickerUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        addStickerToWall(event.target.result, 'Adesivo Personalizado');
+                    };
+                    reader.readAsDataURL(file);
+                }
             });
             
             // Inicializa a parede
