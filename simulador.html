@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arte Mania - Simulador de Paredes</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --text: #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text);
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--secondary);
+        }
+        
+        .simulator-section {
+            padding: 4rem 0;
+            background: linear-gradient(to bottom, #f9f9f9, #e0e0e0);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--secondary);
+        }
+        
+        .simulator-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .wall-preview {
+            flex: 1;
+            min-width: 300px;
+            height: 400px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .controls-panel {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .control-group h3 {
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-option.selected {
+            border-color: var(--dark);
+            transform: scale(1.1);
+        }
+        
+        .texture-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        
+        .texture-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+            cursor: pointer;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        
+        .texture-option:hover {
+            transform: scale(1.05);
+        }
+        
+        .texture-option.selected {
+            border-color: var(--secondary);
+            transform: scale(1.05);
+        }
+        
+        .texture-option div {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .sticker-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        
+        .sticker-option {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, background 0.2s;
+        }
+        
+        .sticker-option:hover {
+            transform: scale(1.05);
+            background: #e0e0e0;
+        }
+        
+        .sticker-option img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .sticker-on-wall {
+            position: absolute;
+            cursor: move;
+            user-select: none;
+            max-width: 100px;
+            max-height: 100px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #c0392b;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .custom-color-input {
+            margin-top: 1rem;
+        }
+        
+        .custom-color-input input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--secondary);
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                justify-content: center;
+            }
+            
+            .simulator-container {
+                flex-direction: column;
+            }
+            
+            .wall-preview {
+                height: 300px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">ARTE <span>MANIA</span></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#sobre">Sobre</a></li>
+                    <li><a href="index.html#diferenciais">Diferenciais</a></li>
+                    <li><a href="index.html#galeria">Galeria</a></li>
+                    <li><a href="index.html#contato">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Simulator Section -->
+    <section class="simulator-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Simulador de Paredes</h2>
+                <p>Experimente diferentes cores, texturas e adesivos para visualizar sua parede personalizada</p>
+            </div>
+            
+            <div class="simulator-container">
+                <div class="wall-preview" id="wall-preview">
+                    <!-- Adesivos serão adicionados aqui via JavaScript -->
+                </div>
+                
+                <div class="controls-panel">
+                    <div class="control-group">
+                        <h3>Cor da Parede</h3>
+                        <div class="color-options">
+                            <div class="color-option selected" style="background-color: #ffffff;" data-color="#ffffff"></div>
+                            <div class="color-option" style="background-color: #f1c40f;" data-color="#f1c40f"></div>
+                            <div class="color-option" style="background-color: #e74c3c;" data-color="#e74c3c"></div>
+                            <div class="color-option" style="background-color: #3498db;" data-color="#3498db"></div>
+                            <div class="color-option" style="background-color: #2ecc71;" data-color="#2ecc71"></div>
+                            <div class="color-option" style="background-color: #9b59b6;" data-color="#9b59b6"></div>
+                        </div>
+                        <div class="custom-color-input">
+                            <label for="custom-color">Ou escolha uma cor personalizada:</label>
+                            <input type="color" id="custom-color" value="#ffffff">
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <h3>Textura</h3>
+                        <div class="texture-options">
+                            <div class="texture-option selected" data-texture="none">
+                                <div style="background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </div>
+                            <div class="texture-option" data-texture="brick">
+                                <div style="background-image: url('https://placehold.co/60x60/aaaaaa/ffffff/png?text=Tijolo'); background-size: cover;"></div>
+                            </div>
+                            <div class="texture-option" data-texture="wood">
+                                <div style="background-image: url('https://placehold.co/60x60/8b4513/ffffff/png?text=Madeira'); background-size: cover;"></div>
+                            </div>
+                            <div class="texture-option" data-texture="concrete">
+                                <div style="background-image: url('https://placehold.co/60x60/808080/ffffff/png?text=Concreto'); background-size: cover;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <h3>Adesivos Decorativos</h3>
+                        <div class="sticker-options">
+                            <div class="sticker-option" data-sticker="tree">
+                                <img src="https://placehold.co/40x40/2ecc71/ffffff/png?text=Árvore" alt="Árvore">
+                            </div>
+                            <div class="sticker-option" data-sticker="flower">
+                                <img src="https://placehold.co/40x40/e74c3c/ffffff/png?text=Flor" alt="Flor">
+                            </div>
+                            <div class="sticker-option" data-sticker="star">
+                                <img src="https://placehold.co/40x40/f1c40f/ffffff/png?text=Estrela" alt="Estrela">
+                            </div>
+                            <div class="sticker-option" data-sticker="heart">
+                                <img src="https://placehold.co/40x40/e74c3c/ffffff/png?text=Coração" alt="Coração">
+                            </div>
+                            <div class="sticker-option" data-sticker="bird">
+                                <img src="https://placehold.co/40x40/3498db/ffffff/png?text=Pássaro" alt="Pássaro">
+                            </div>
+                            <div class="sticker-option" data-sticker="butterfly">
+                                <img src="https://placehold.co/40x40/9b59b6/ffffff/png?text=Borboleta" alt="Borboleta">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn" id="save-design">
+                            <i class="fas fa-save"></i> Salvar Projeto
+                        </button>
+                        <button class="btn btn-outline" id="reset-design">
+                            <i class="fas fa-redo"></i> Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Arte Mania</h3>
+                    <p>Não vendemos apenas paredes decoradas, vendemos um ambiente que fala sobre você. E cada projeto é único.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-phone"></i> (31) 98888-7777</li>
+                        <li><i class="fas fa-envelope"></i> contato@artemania.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Belo Horizonte, MG</li>
+                    </ul>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Links Rápidos</h3>
+                    <ul class="contact-info">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#sobre">Sobre</a></li>
+                        <li><a href="index.html#diferenciais">Diferenciais</a></li>
+                        <li><a href="index.html#galeria">Galeria</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Arte Mania - Todos os direitos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const wallPreview = document.getElementById('wall-preview');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const customColorInput = document.getElementById('custom-color');
+            const textureOptions = document.querySelectorAll('.texture-option');
+            const stickerOptions = document.querySelectorAll('.sticker-option');
+            const resetButton = document.getElementById('reset-design');
+            const saveButton = document.getElementById('save-design');
+            
+            let currentColor = '#ffffff';
+            let currentTexture = 'none';
+            let selectedSticker = null;
+            let stickersOnWall = [];
+            
+            // Função para atualizar a aparência da parede
+            function updateWallAppearance() {
+                wallPreview.style.backgroundColor = currentColor;
+                
+                // Remove classes de textura existentes
+                wallPreview.classList.remove('texture-brick', 'texture-wood', 'texture-concrete');
+                
+                // Adiciona a classe de textura selecionada
+                if (currentTexture !== 'none') {
+                    wallPreview.classList.add(`texture-${currentTexture}`);
+                }
+            }
+            
+            // Event listeners para opções de cor
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove a classe selected de todas as opções
+                    colorOptions.forEach(opt => opt.classList.remove('selected'));
+                    // Adiciona a classe selected à opção clicada
+                    this.classList.add('selected');
+                    // Atualiza a cor atual
+                    currentColor = this.getAttribute('data-color');
+                    // Atualiza a cor personalizada para corresponder
+                    customColorInput.value = currentColor;
+                    // Atualiza a aparência da parede
+                    updateWallAppearance();
+                });
+            });
+            
+            // Event listener para o seletor de cor personalizada
+            customColorInput.addEventListener('input', function() {
+                currentColor = this.value;
+                // Remove a seleção de todas as opções de cor pré-definidas
+                colorOptions.forEach(opt => opt.classList.remove('selected'));
+                updateWallAppearance();
+            });
+            
+            // Event listeners para opções de textura
+            textureOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove a classe selected de todas as opções
+                    textureOptions.forEach(opt => opt.classList.remove('selected'));
+                    // Adiciona a classe selected à opção clicada
+                    this.classList.add('selected');
+                    // Atualiza a textura atual
+                    currentTexture = this.getAttribute('data-texture');
+                    // Atualiza a aparência da parede
+                    updateWallAppearance();
+                });
+            });
+            
+            // Event listeners para opções de adesivo
+            stickerOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    selectedSticker = this.getAttribute('data-sticker');
+                    
+                    // Cria um novo elemento de adesivo na parede
+                    const newSticker = document.createElement('div');
+                    newSticker.className = 'sticker-on-wall';
+                    newSticker.innerHTML = `<img src="https://placehold.co/80x80/3498db/ffffff/png?text=${selectedSticker}" alt="${selectedSticker}">`;
+                    
+                    // Posição aleatória na parede
+                    const maxX = wallPreview.offsetWidth - 80;
+                    const maxY = wallPreview.offsetHeight - 80;
+                    const randomX = Math.floor(Math.random() * maxX);
+                    const randomY = Math.floor(Math.random() * maxY);
+                    
+                    newSticker.style.left = `${randomX}px`;
+                    newSticker.style.top = `${randomY}px`;
+                    
+                    // Torna o adesivo arrastável
+                    makeDraggable(newSticker);
+                    
+                    wallPreview.appendChild(newSticker);
+                    stickersOnWall.push(newSticker);
+                });
+            });
+            
+            // Função para tornar os elementos arrastáveis
+            function makeDraggable(element) {
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                
+                element.onmousedown = dragMouseDown;
+                
+                function dragMouseDown(e) {
+                    e.preventDefault();
+                    // Obter a posição do cursor
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    document.onmouseup = closeDragElement;
+                    // Chamar uma função sempre que o cursor se mover
+                    document.onmousemove = elementDrag;
+                }
+                
+                function elementDrag(e) {
+                    e.preventDefault();
+                    // Calcular a nova posição do cursor
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    // Definir a nova posição do elemento
+                    element.style.top = (element.offsetTop - pos2) + "px";
+                    element.style.left = (element.offsetLeft - pos1) + "px";
+                }
+                
+                function closeDragElement() {
+                    // Parar de mover quando o botão do mouse for solto
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }
+            }
+            
+            // Event listener para o botão de reiniciar
+            resetButton.addEventListener('click', function() {
+                // Remove todos os adesivos
+                stickersOnWall.forEach(sticker => sticker.remove());
+                stickersOnWall = [];
+                
+                // Reseta para a cor branca e sem textura
+                currentColor = '#ffffff';
+                currentTexture = 'none';
+                
+                // Atualiza as seleções visuais
+                colorOptions.forEach(opt => {
+                    if (opt.getAttribute('data-color') === '#ffffff') {
+                        opt.classList.add('selected');
+                    } else {
+                        opt.classList.remove('selected');
+                    }
+                });
+                
+                textureOptions.forEach(opt => {
+                    if (opt.getAttribute('data-texture') === 'none') {
+                        opt.classList.add('selected');
+                    } else {
+                        opt.classList.remove('selected');
+                    }
+                });
+                
+                customColorInput.value = '#ffffff';
+                updateWallAppearance();
+            });
+            
+            // Event listener para o botão de salvar
+            saveButton.addEventListener('click', function() {
+                alert('Design salvo com sucesso! Entre em contato conosco para transformar este projeto em realidade.');
+                // Aqui você pode adicionar funcionalidade para realmente salvar o design
+            });
+            
+            // Inicializa a parede
+            updateWallAppearance();
+        });
+    </script>
+</body>
+</html>
